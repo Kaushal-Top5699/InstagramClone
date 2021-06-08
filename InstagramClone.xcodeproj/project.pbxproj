@@ -20,7 +20,6 @@
 		96C417D6266A25BF00C91604 /* StoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 96C417D4266A25BF00C91604 /* StoryCell.xib */; };
 		96C417DE266A73A800C91604 /* CreatePostVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C417DD266A73A800C91604 /* CreatePostVC.swift */; };
 		96C417E2266A778600C91604 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 96C417E1266A778600C91604 /* GoogleService-Info.plist */; };
-		96C417E5266A9CD400C91604 /* PostModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C417E4266A9CD300C91604 /* PostModel.swift */; };
 		96C41810266CBE8100C91604 /* InstaPostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C4180E266CBE8100C91604 /* InstaPostCell.swift */; };
 		96C41811266CBE8100C91604 /* InstaPostCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 96C4180F266CBE8100C91604 /* InstaPostCell.xib */; };
 		96C41813266DF28A00C91604 /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C41812266DF28A00C91604 /* SearchVC.swift */; };
@@ -34,7 +33,6 @@
 		96C41824266E4B4F00C91604 /* DetailsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96C41823266E4B4F00C91604 /* DetailsVC.swift */; };
 		96CD2A012669055C00D4D2A5 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CD2A002669055C00D4D2A5 /* HomeVC.swift */; };
 		96CD2A032669225F00D4D2A5 /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96CD2A022669225F00D4D2A5 /* ProfileVC.swift */; };
-		96F649FE266EA27200D273B5 /* ImageHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F649FD266EA27200D273B5 /* ImageHolder.swift */; };
 		96F64A00266F998F00D273B5 /* PostModelTwo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F649FF266F998F00D273B5 /* PostModelTwo.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,7 +53,6 @@
 		96C417D4266A25BF00C91604 /* StoryCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StoryCell.xib; sourceTree = "<group>"; };
 		96C417DD266A73A800C91604 /* CreatePostVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostVC.swift; sourceTree = "<group>"; };
 		96C417E1266A778600C91604 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		96C417E4266A9CD300C91604 /* PostModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModel.swift; sourceTree = "<group>"; };
 		96C4180E266CBE8100C91604 /* InstaPostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstaPostCell.swift; sourceTree = "<group>"; };
 		96C4180F266CBE8100C91604 /* InstaPostCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InstaPostCell.xib; sourceTree = "<group>"; };
 		96C41812266DF28A00C91604 /* SearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
@@ -69,7 +66,6 @@
 		96C41823266E4B4F00C91604 /* DetailsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsVC.swift; sourceTree = "<group>"; };
 		96CD2A002669055C00D4D2A5 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		96CD2A022669225F00D4D2A5 /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
-		96F649FD266EA27200D273B5 /* ImageHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHolder.swift; sourceTree = "<group>"; };
 		96F649FF266F998F00D273B5 /* PostModelTwo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostModelTwo.swift; sourceTree = "<group>"; };
 		F1BF87631C5290FB9F6FFA4B /* Pods-InstagramClone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-InstagramClone.release.xcconfig"; path = "Target Support Files/Pods-InstagramClone/Pods-InstagramClone.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -186,11 +182,9 @@
 		96C417E3266A9CBC00C91604 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				96C417E4266A9CD300C91604 /* PostModel.swift */,
 				96C41816266E04BE00C91604 /* ImageModel.swift */,
 				96C4181A266E09BA00C91604 /* UserModel.swift */,
 				96C41821266E487100C91604 /* TagAndPlaceModel.swift */,
-				96F649FD266EA27200D273B5 /* ImageHolder.swift */,
 				96F649FF266F998F00D273B5 /* PostModelTwo.swift */,
 			);
 			name = Models;
@@ -330,13 +324,11 @@
 				96C4181E266E0A6400C91604 /* UserCell.swift in Sources */,
 				96CD2A032669225F00D4D2A5 /* ProfileVC.swift in Sources */,
 				96C417D5266A25BF00C91604 /* StoryCell.swift in Sources */,
-				96C417E5266A9CD400C91604 /* PostModel.swift in Sources */,
 				9656F2542668B93900EF210C /* InstagramClone.xcdatamodeld in Sources */,
 				96CD2A012669055C00D4D2A5 /* HomeVC.swift in Sources */,
 				96C41824266E4B4F00C91604 /* DetailsVC.swift in Sources */,
 				9684E6A42668F19C006500C1 /* SignUpVC.swift in Sources */,
 				96C4181B266E09BA00C91604 /* UserModel.swift in Sources */,
-				96F649FE266EA27200D273B5 /* ImageHolder.swift in Sources */,
 				96C41822266E487200C91604 /* TagAndPlaceModel.swift in Sources */,
 				9656F24C2668B93800EF210C /* SceneDelegate.swift in Sources */,
 				96C41810266CBE8100C91604 /* InstaPostCell.swift in Sources */,
