@@ -8,8 +8,11 @@
 import Foundation
 import UIKit
 
-struct ImageModel {
+class ImageModel {
     
     var image: String
     
+    init(image: String) {
+        self.image = image
+    }
 }

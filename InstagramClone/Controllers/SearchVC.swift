@@ -57,8 +57,9 @@ class SearchVC: UIViewController {
                 "Content-Type": "application/json"
             ]
             
+            let URI = "\(URL)?limit=-1&timestamp=-1"
             
-            AF.request(URL, method: .get, encoding: JSONEncoding.default, headers: headers)
+            AF.request(URI, method: .get, encoding: JSONEncoding.default, headers: headers)
                 .responseJSON { [self] response in
                     
                     if let myBody = response.value as? Array<Any> {
@@ -66,14 +67,17 @@ class SearchVC: UIViewController {
                         for postUid in myBody {
                             
                             let newUrl = "\(URL2)?id=\(postUid)"
+                            
+                            let myImage = ImageModel(image: "")
+                            imageArray.append(myImage)
+                            
                             AF.request(newUrl, method: .get, encoding: JSONEncoding.default, headers: headers)
                                 .responseJSON { response in
                                     
                                     if let myPost = response.value as? Dictionary<String, Any> {
                                         
                                         let imageUrl = myPost["postImage"] as! String
-                                        let myImage = ImageModel(image: imageUrl)
-                                        imageArray.append(myImage)
+                                        myImage.image = imageUrl
                                         collectionView.reloadData()
                                     }
                                 }
