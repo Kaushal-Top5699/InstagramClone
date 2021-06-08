@@ -15,7 +15,7 @@ class HomeVC: UIViewController{
     @IBOutlet weak var storyCollectionView: UICollectionView!
     
     @IBOutlet weak var tableView: UITableView!
-    var postArray = [PostModelTwo]()
+    var postArray = [PostModel]()
     let refreshControl = UIRefreshControl()
     
     let cache = NSCache<NSString, UIImage>()
@@ -32,23 +32,38 @@ class HomeVC: UIViewController{
         //Hides the hairline under navigation bar
         navigationController?.navigationBar.setValue(true, forKey: "hidesShadow")
     
-        fetchPosts()
+        fetchPosts(clear: false)
         
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         tableView.addSubview(refreshControl)
+        
+        Reload.fetchPostsCallback = fetchPosts
+        Reload.timestamp = 0
     }
     
     @objc func refresh(_ sender: AnyObject) {
-        self.viewDidLoad()
-        self.viewWillAppear(true)
+        
+        fetchPosts(clear: false)
         refreshControl.endRefreshing()
+
     }
     
-    private func fetchPosts() {
+    private func fetchPosts(clear: Bool) {
+        
+        if clear {
+            postArray.removeAll()
+        }
+        
+        print("Fetch called again")
+        print(Reload.timestamp)
         
         let URL = "http://localhost:3000/view-all-posts"
+        let URL2 = "http://localhost:3000/get-post"
         let storedToken = UserDefaults.standard.object(forKey: "token")
+        
+        
+        let limit = 2
         
         if storedToken != nil {
             let headers: HTTPHeaders = [
@@ -56,32 +71,53 @@ class HomeVC: UIViewController{
                 "Content-Type": "application/json"
             ]
                 
-                AF.request(URL, method: .get, encoding: JSONEncoding.default, headers: headers)
+            let urlOfViewPost = "\(URL)?limit=\(limit)&timestamp=\(Reload.timestamp)"
+            
+                AF.request(urlOfViewPost, method: .get, encoding: JSONEncoding.default, headers: headers)
                     .responseJSON { [self] response in
 
-                        if let myBody = response.value as? Array<Dictionary<String, Any>> {
-                            self.postArray.removeAll()
-                            for body in myBody {
+                        if let body = response.value as? Dictionary<String, Any> {
+                            
+                            let myBody = body["posts"] as! Array<Any>
+                            
+                            if let lastItem = body["timestamp"] as? CLong {
                                 
-                                let stringURL = body["postImage"] as! String
-                                let likes = body["postLikes"] as! Array<Any>
-                                let totalLikes = likes.count
-                                let post = PostModelTwo(username: body["username"] as! String, caption: body["caption"] as! String, date: body["date"] as! String, postLikes: "\(totalLikes) Likes", image: stringURL)
-                                self.postArray.append(post)
-                                tableView.reloadData()
-                                                                                        
+                                if lastItem >= 0 {
+                                    Reload.timestamp = lastItem
+                                    print(Reload.timestamp)
+                                }
                             }
                             
-                        } else if let body = response.value as? Dictionary<String, Any> {
-                            
-                            self.postArray.removeAll()
-                            let imageUrl = body["postImage"] as! String
-                            
-                            let likes = body["postLikes"] as! Array<Any>
-                            let totalLikes = likes.count
-                            let post = PostModelTwo(username: body["username"] as! String, caption: body["caption"] as! String, date: body["date"] as! String, postLikes: "\(totalLikes) Likes", image: imageUrl)
-                            self.postArray.append(post)
-                            tableView.reloadData()
+                            for uid in myBody {
+                        
+                                let post2 = PostModel(username: "", caption: "", date: "", postLikes: "", image: "")
+                                postArray.append(post2)
+                                
+                                let urlOfGetPost = "\(URL2)?id=\(uid)"
+                                AF.request(urlOfGetPost, method: .get, encoding: JSONEncoding.default, headers: headers)
+                                    .responseJSON { response in
+                                        
+                                        if let myPost = response.value as? Dictionary<String, Any> {
+                                           
+                                            let likes = myPost["postLikes"] as! Array<Any>
+                                            let totalLikes = likes.count
+                                            let username = myPost["username"] as! String
+                                            let caption = myPost["caption"] as! String
+                                            let date = myPost["date"] as! String
+                                            let image = myPost["postImage"] as! String
+                                            
+                                            post2.username = username
+                                            post2.caption = caption
+                                            post2.date = date
+                                            post2.postLikes = String(totalLikes)
+                                            post2.image = image
+
+                                            tableView.reloadData()
+                                            
+                                        }
+                                        
+                                    }
+                            }
                             
                         }
                     }
@@ -135,7 +171,6 @@ extension HomeVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let post = self.postArray[indexPath.row]
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "InstaPostCell", for: indexPath) as! InstaPostCell
         cell.username.text = post.username
         cell.captionLabel.text = post.caption

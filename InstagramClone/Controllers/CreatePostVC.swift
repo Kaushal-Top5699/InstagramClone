@@ -66,7 +66,6 @@ class CreatePostVC: UIViewController, UIImagePickerControllerDelegate, UINavigat
                 let parameters: [String: String] = [
                     "postImage": urlString,
                     "caption": self.captionText.text!,
-                    "date": Date.getCurrentDate()
                 ]
                 let headers: HTTPHeaders = [
                     "Authorization": storedToken as! String,
@@ -82,6 +81,10 @@ class CreatePostVC: UIViewController, UIImagePickerControllerDelegate, UINavigat
                             self.captionText.text = "Write a caption..."
                             self.imageView.image = #imageLiteral(resourceName: "addIcon")
                             self.progressView.isHidden = true
+                            
+                            Reload.timestamp = 0
+                            Reload.fetchPostsCallback!(true)
+                            
                         } else {
                             print(statusCode)
                             return
@@ -110,15 +113,6 @@ class CreatePostVC: UIViewController, UIImagePickerControllerDelegate, UINavigat
         imageView.image = info[.originalImage] as? UIImage
         self.dismiss(animated: true, completion: nil)
         
-    }
-}
-
-extension Date {
-
- static func getCurrentDate() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd/MM/yyyy"
-        return dateFormatter.string(from: Date())
     }
 }
 

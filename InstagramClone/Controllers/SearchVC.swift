@@ -7,6 +7,7 @@
 
 import UIKit
 import Alamofire
+import Kingfisher
 
 class SearchVC: UIViewController {
     
@@ -45,6 +46,8 @@ class SearchVC: UIViewController {
     private func fetchImageCollection() {
         
         let URL = "http://localhost:3000/view-all-posts"
+        let URL2 = "http://localhost:3000/get-post"
+        
         let storedToken = UserDefaults.standard.object(forKey: "token")
         
         if storedToken != nil {
@@ -54,37 +57,33 @@ class SearchVC: UIViewController {
                 "Content-Type": "application/json"
             ]
             
-            var image = UIImage()
+            
             AF.request(URL, method: .get, encoding: JSONEncoding.default, headers: headers)
                 .responseJSON { [self] response in
                     
-                    if let myBody = response.value as? Array<Dictionary<String, Any>> {
-                        for body in myBody {
-                            image = downloadImage(urlString: body["postImage"] as! String)!
-                            self.imageArray.append(ImageModel(image: image))
-                            //print("Array Appended")
+                    if let myBody = response.value as? Array<Any> {
+                        
+                        for postUid in myBody {
+                            
+                            let newUrl = "\(URL2)?id=\(postUid)"
+                            AF.request(newUrl, method: .get, encoding: JSONEncoding.default, headers: headers)
+                                .responseJSON { response in
+                                    
+                                    if let myPost = response.value as? Dictionary<String, Any> {
+                                        
+                                        let imageUrl = myPost["postImage"] as! String
+                                        let myImage = ImageModel(image: imageUrl)
+                                        imageArray.append(myImage)
+                                        collectionView.reloadData()
+                                    }
+                                }
                         }
-                    } else if let body = response.value as? Dictionary<String, Any> {
-                        image = downloadImage(urlString: body["postImage"] as! String)!
-                        self.imageArray.append(ImageModel(image: image))
-                        //print("Array Appended")
                     }
-                    self.collectionView.reloadData()
-                    print("collectionView Reloaded")
                 }
+            
         } else {
             print("Authentication Required")
         }
-    }
-    
-    private func downloadImage(urlString: String) -> UIImage? {
-        var image = UIImage()
-        let donwloadURL = NSURL(string: urlString)
-        if let data = try? Data(contentsOf: donwloadURL! as URL) {
-            image = UIImage(data: data)!
-            return image
-        }
-        return nil
     }
 }
 
@@ -97,7 +96,8 @@ extension SearchVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let postImage = self.imageArray[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCell", for: indexPath) as! ImageCell
-        cell.imageView.image = postImage.image
+        let url = URL(string: postImage.image)
+        cell.imageView.kf.setImage(with: url)
         return cell
     }
 }

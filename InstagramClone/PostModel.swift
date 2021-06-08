@@ -7,13 +7,14 @@
 
 import Foundation
 import UIKit
-class PostModelTwo {
+class PostModel {
     
-    let username: String
-    let caption: String
-    let date: String
-    let postLikes: String
+    var username: String
+    var caption: String
+    var date: String
+    var postLikes: String
     var image: String
+    
     
     init(username: String, caption: String, date: String, postLikes: String, image: String) {
         self.username = username
