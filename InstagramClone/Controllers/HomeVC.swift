@@ -55,8 +55,6 @@ class HomeVC: UIViewController{
                 "Authorization": storedToken as! String,
                 "Content-Type": "application/json"
             ]
-            
-            var image = UIImage()
                 
                 AF.request(URL, method: .get, encoding: JSONEncoding.default, headers: headers)
                     .responseJSON { [self] response in
@@ -78,48 +76,17 @@ class HomeVC: UIViewController{
                             
                             self.postArray.removeAll()
                             let imageUrl = body["postImage"] as! String
-                            downloadImage(urlString: imageUrl) { result in
-                                image = result
-                                let likes = body["postLikes"] as! Array<Any>
-                                let totalLikes = likes.count
-                                let post = PostModelTwo(username: body["username"] as! String, caption: body["caption"] as! String, date: body["date"] as! String, postLikes: "\(totalLikes) Likes", image: imageUrl)
-                                self.postArray.append(post)
-                                
-                                DispatchQueue.main.async {
-                                    tableView.reloadData()
-                                }
-                            }
+                            
+                            let likes = body["postLikes"] as! Array<Any>
+                            let totalLikes = likes.count
+                            let post = PostModelTwo(username: body["username"] as! String, caption: body["caption"] as! String, date: body["date"] as! String, postLikes: "\(totalLikes) Likes", image: imageUrl)
+                            self.postArray.append(post)
+                            tableView.reloadData()
+                            
                         }
                     }
         } else {
             print("Authentication required")
-        }
-    }
-    
-    
-    //MARK: - Image downloading in background
-    private func downloadImage(urlString: String, callback: @escaping (UIImage)->()) {
-        var image = UIImage()
-        let donwloadURL = NSURL(string: urlString)
-        
-        DispatchQueue.global().async {
-            
-            if let cachedImage = self.cache.object(forKey: urlString as NSString) {
-                callback(cachedImage)
-                self.displayAlert(title: "Cached", message: "Cached Successfully", btnTitle: "I understand")
-            } else {
-                
-                if let data = try? Data(contentsOf: donwloadURL! as URL) {
-                    image = UIImage(data: data)!
-                    self.cache.setObject(image, forKey: urlString as NSString)
-                    let cachedImage = self.cache.object(forKey: urlString as NSString)
-                    callback(cachedImage!)
-                    print("Cached Image")
-                }
-//                callback(image)
-                print("Downloaded Image")
-            }
-
         }
     }
     
